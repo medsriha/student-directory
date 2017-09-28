@@ -18,15 +18,20 @@ The methods have the following actions
 ● addStudent - given the student object, add the new student into the three maps if the given
 student’s ID is not present in the directory. If the student’s ID is present, throw
 IllegalArgumentException.
+
 ● deleteStudent - given the ID string value, this method removes the
 corresponding student object from the three maps if present. If no ID matches, throw
 IllegalArgumentException.
+
 ● searchByFirstName - given the first name string value, this method returns a list
 containing all students that match the given first name. If no students in the directory have the
 given first name, return a zero length list of students.
+
 ● searchByLastName - given the last name string value, this method should return a list containing
 all students that match the given last name. If no students in the directory have the given last
 name, return a zero length list of students.
+
 ● searchById - given the andrew id string value, this method returns the student in
 the directory. If no student in the directory has the given ID, return null.
+
 ● size - returns the number of students in the directory.
