@@ -13,7 +13,7 @@ accordingly so that the Students in the directory can be found when searching by
 name or last name.
 
 
-The methods have the following actions
+The methods have the following actions:
 
 ● addStudent - given the student object, add the new student into the three maps if the given
 student’s ID is not present in the directory. If the student’s ID is present, throw
