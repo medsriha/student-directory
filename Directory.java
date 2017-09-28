@@ -2,7 +2,6 @@
  * Directory Class allows the user
  * to search, add or delete any student
  * object.
- * ID: msriha.
  * @author Mohamed Sriha
  */
 import java.util.ArrayList;
