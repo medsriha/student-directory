@@ -1,6 +1,5 @@
 /**
  * This is the Student Class.
- * Andrew ID: msriha.
  * @author Mohamed Sriha
  */
 public class Student {
@@ -15,20 +14,20 @@ public class Student {
     /**
      * instance primitive data.
      */
-    private String andrewId;
+    private String id;
     /**
      * instance primitive data.
      */
     private String phoneNumber;
     /**
-     * @param andrewId
+     * @param id
      * Student Class constructor.
      */
-    public Student(String andrewId) {
-    if (andrewId == null) {
+    public Student(String id) {
+    if (id == null) {
         throw new IllegalArgumentException();
     	     } else {
-    	    this.andrewId = andrewId;
+    	    this.id = id;
         }
     }
     /**
@@ -71,10 +70,10 @@ public class Student {
     	}
     /**
      * Andre_id Getter.
-     * @return andrewId
+     * @return id
      */
-    public String getAndrewId() {
-    	    return andrewId;
+    public String getId() {
+    	    return id;
     	}
     /**
      * Phone_number Getter.
