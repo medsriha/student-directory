@@ -1,8 +1,8 @@
 /**
- * Directory Class allows to the user
+ * Directory Class allows the user
  * to search, add or delete any student
  * object.
- * Andrew ID: msriha.
+ * ID: msriha.
  * @author Mohamed Sriha
  */
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Directory {
     /**
      * Map instance data.
      */
-    private Map<String, Student> andrewIdMap = new HashMap<String, Student>();
+    private Map<String, Student> idMap = new HashMap<String, Student>();
     /**
      * Map instance data.
      */
@@ -44,11 +44,11 @@ public class Directory {
      * addStudent - given the student object, add the new student into the three maps.
      */
     public void addStudent(Student s) {
-        if (s == null || andrewIdMap.containsKey(s.getAndrewId())) {
+        if (s == null || idMap.containsKey(s.getId())) {
             throw new IllegalArgumentException();
         } else {
         System.out.println("add: " + s);
-        andrewIdMap.put(s.getAndrewId(), s);
+        idMap.put(s.getId(), s);
           if (firsNameMap.containsKey(s.getFirstName())) {
     	            firsNameMap.get(s.getFirstName()).add(s);
     	        } else {
@@ -66,22 +66,22 @@ public class Directory {
         }
     }
     /**
-     *@param andrewId
-     *deleteStudent - given the Andrew id string value, this method remove the
-     *corresponding student object from the three maps if present. If no Andrew
+     *@param id
+     *deleteStudent - given the id string value, this method remove the
+     *corresponding student object from the three maps if present. If no
      *id matches, throw IllegalArgumentException.
      */
-    public void deleteStudent(String andrewId) {
-    	    if (!(andrewIdMap.containsKey(andrewId))) {
+    public void deleteStudent(String id) {
+    	    if (!(idMap.containsKey(id))) {
             throw new IllegalArgumentException();
     	    } else {
-    	    	    //andrew id remove.
-    	    	    andrewIdMap.remove(andrewId);
-            System.out.println("delete: " + andrewId);
+    	    	    //id remove.
+    	    	    idMap.remove(id);
+            System.out.println("delete: " + id);
     	    	   //First Name remove.
     	    	    for (Entry<String, List<Student>> entry :firsNameMap.entrySet()) {
                 for (int i = 0; i < entry.getValue().size(); i++) {
-    	 			    if (entry.getValue().get(i).getAndrewId().equals(andrewId)) {
+    	 			    if (entry.getValue().get(i).getid().equals(id)) {
                         firsNameMap.get(entry.getKey()).remove(i);
                     }
     	             }
@@ -89,7 +89,7 @@ public class Directory {
     	    	    //last name remove.
     	        for (Entry<String, List<Student>> entry :lastNameMap.entrySet()) {
     	 	        for (int i = 0; i < entry.getValue().size(); i++) {
-    	                 if (entry.getValue().get(i).getAndrewId().equals(andrewId)) {
+    	                 if (entry.getValue().get(i).getid().equals(id)) {
     	            	         lastNameMap.get(entry.getKey()).remove(i);
                      }
     	             }
@@ -97,21 +97,21 @@ public class Directory {
     	    	}
     }
     /**
-     * @param andrewId
-     * searchByAndrewId - given the andrew id string value, this method should return
-     * the student in  the directory. If no student in the directory has the given Andrew ID
+     * @param id
+     * searchById - given the id string value, this method should return
+     * the student in the directory. If no student in the directory has the given ID
      * return null.
      * @return student Object
      */
-     public Student searchByAndrewId(String andrewId) {
-    	 if (andrewId == null) {
+     public Student searchById(String id) {
+    	 if (id == null) {
     	    	 throw new IllegalArgumentException();
     	     }
-    	     if (andrewIdMap.isEmpty() || !(andrewIdMap.containsKey(andrewId))) {
+    	     if (idMap.isEmpty() || !(andrewIdMap.containsKey(andrewId))) {
     		     return null;
     	        } else {
-    	            System.out.println("search by Andrew ID: " + andrewId);
-                return andrewIdMap.get(andrewId);
+    	            System.out.println("search by ID: " + id);
+                return idMap.get(id);
             }
     }
     /**
