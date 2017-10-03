@@ -1,0 +1,476 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Scanner;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+/**
+ * This is the Directory GUI driver. Andrew ID msriha.
+ * @author medsr
+ */
+public class DirectoryDriver extends JFrame {
+    /**
+     * Instance variable serialVersionUID.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * Instance variable Directory class.
+     */
+    private Directory d;
+    /**
+     * Instance variable Student class.
+     */
+    private Student newStudent;
+    /**
+     * Instance variable main Panel.
+     */
+    private JPanel directoryPanel;
+    /**
+     * Instance variable addStudent Panel.
+     */
+    private JPanel addStudent;
+    /**
+     * Instance variable deleteStudent Panel.
+     */
+    private JPanel deleteStudent;
+    /**
+     * Instance variable searchStudent Panel.
+     */
+    private JPanel searchStudent;
+    /**
+     * Instance variable resultOutput Panel.
+     */
+    private JPanel resutlOutput;
+    /**
+     * Instance variable addStudentButton button.
+     */
+    private JButton addStudentButton;
+    /**
+     * Instance variable deleteStudentButton button.
+     */
+    private JButton deleteStudentButton;
+    /**
+     * Instance variable andrewButton button.
+     */
+    private JButton andrewButton;
+    /**
+     * Instance variable firstNameButton button.
+     */
+    private JButton firstNameButton;
+    /**
+     * Instance variable lastNameButton button.
+     */
+    private JButton lastNameButton;
+    /**
+     * Instance variable TextArea area.
+     */
+    private JTextArea area;
+    /**
+     * Instance variable TextArea searchKeyText.
+     */
+    private JTextArea searchKeyText;
+    /**
+     * Instance variable TextArea firstNameText.
+     */
+    private JTextArea firstNameText;
+    /**
+     * Instance variable TextArea lastNameText.
+     */
+    private JTextArea lastNameText;
+    /**
+     * Instance variable TextArea andrewIdText.
+     */
+    private JTextArea andrewIdText;
+    /**
+     * Instance variable TextArea phoneNumberText.
+     */
+    private JTextArea phoneNumberText;
+    /**
+     * Instance variable TextArea deleteStudentText.
+     */
+    private JTextArea deleteStudentText;
+
+    /**
+     * @param csvFile
+     *            Directory driver with file parameter. Reader a file and store all
+     *            data inside it in the memory.
+     * @throws IOException
+     */
+    public DirectoryDriver(File csvFile) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(csvFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // read file line by line
+        String line = null;
+        Scanner scanner = null;
+        int index = 0;
+        d = new Directory();
+        // Loading data into the memory
+        try {
+            while ((line = reader.readLine()) != null) {
+                scanner = new Scanner(line);
+                scanner.useDelimiter(",");
+                String[] arr = new String[4];
+                while (scanner.hasNext()) {
+                    String data = scanner.next();
+                    arr[index] = data;
+                    index++;
+                }
+                newStudent = new Student(arr[2]);
+                newStudent.setFirstName(arr[0]);
+                newStudent.setLastName(arr[1]);
+                newStudent.setPhoneNumber(arr[3]);
+                d.addStudent(newStudent);
+                index = 0;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // GUI and listener methods
+        this.gui();
+        this.listener();
+    }
+    /**
+     * DirectoryDriver without parameter.
+     */
+    public DirectoryDriver() {
+        this.gui();
+        d = new Directory();
+        this.listener();
+    }
+    /**
+     * GUI method. This method create the driver GUI. It will be called in both
+     * drivers.
+     */
+    public void gui() {
+        setSize(900, 400);
+        setTitle("Student Directory");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // Main Panel
+        directoryPanel = new JPanel();
+        directoryPanel.setBackground(Color.white);
+        // Add Student Panel
+        addStudent = new JPanel();
+        addStudent.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        addStudent.setBackground(Color.white);
+        addStudent.setPreferredSize(new Dimension(850, 50));
+        // Add First Name
+        addStudent.add(new JLabel("First name:"));
+        firstNameText = new JTextArea();
+        firstNameText.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        firstNameText.setWrapStyleWord(true);
+        firstNameText.setLineWrap(true);
+        addStudent.add(new JScrollPane(firstNameText));
+        // addStudent.add(firstNameText);
+        // Add Last Name
+        addStudent.add(new JLabel("Last name:"));
+        lastNameText = new JTextArea();
+        lastNameText.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        lastNameText.setLineWrap(true);
+        lastNameText.setWrapStyleWord(true);
+        addStudent.add(new JScrollPane(lastNameText));
+        // Add Andrew ID
+        addStudent.add(new JLabel("Andrew ID:"));
+        andrewIdText = new JTextArea();
+        andrewIdText.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        andrewIdText.setLineWrap(true);
+        andrewIdText.setWrapStyleWord(true);
+        addStudent.add(new JScrollPane(andrewIdText));
+        // Add Phone Number
+        addStudent.add(new JLabel("Phone Number:"));
+        phoneNumberText = new JTextArea();
+        phoneNumberText.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        phoneNumberText.setWrapStyleWord(true);
+        phoneNumberText.setLineWrap(true);
+        addStudent.add(phoneNumberText);
+        addStudent.add(new JScrollPane(phoneNumberText));
+        addStudentButton = new JButton("Add");
+        addStudent.add(addStudentButton);
+        // Delete Student Panel
+        deleteStudent = new JPanel();
+        deleteStudent.setBackground(Color.WHITE);
+        deleteStudent.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        deleteStudent.setPreferredSize(new Dimension(850, 50));
+        deleteStudent.add(new JLabel("Andrew ID:"));
+        deleteStudentText = new JTextArea();
+        deleteStudentText.setWrapStyleWord(true);
+        deleteStudentText.setLineWrap(true);
+        deleteStudentText.setColumns(15);
+        deleteStudentText.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        deleteStudent.add(new JScrollPane(deleteStudentText));
+        deleteStudentButton = new JButton("Delete");
+        deleteStudent.add(deleteStudentButton);
+        // Search Student Panel
+        searchStudent = new JPanel();
+        searchStudent.setBackground(Color.white);
+        searchStudent.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        searchStudent.setPreferredSize(new Dimension(850, 50));
+        searchStudent.add(new JLabel("Search key:"));
+        searchKeyText = new JTextArea();
+        searchKeyText.setWrapStyleWord(true);
+        searchKeyText.setLineWrap(true);
+        searchKeyText.setColumns(20);
+        searchKeyText.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        searchStudent.add(new JScrollPane(searchKeyText));
+        andrewButton = new JButton("By Andrew ID");
+        searchStudent.add(andrewButton);
+        firstNameButton = new JButton("By First Name");
+        searchStudent.add(firstNameButton);
+        lastNameButton = new JButton("By Last Name");
+        searchStudent.add(lastNameButton);
+        // output text Panel
+        resutlOutput = new JPanel();
+        resutlOutput.setBackground(Color.WHITE);
+        resutlOutput.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        resutlOutput.setPreferredSize(new Dimension(850, 200));
+        area = new JTextArea();
+        area.setColumns(69);
+        area.setRows(11);
+        area.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        area.append("Welecome to the Student Directory ==> Add, Delete or Search Students\n");
+        resutlOutput.add(new JScrollPane(area));
+        area.setEditable(false);
+        // add the four panels into the main panel
+        directoryPanel.add(addStudent);
+        directoryPanel.add(deleteStudent);
+        directoryPanel.add(searchStudent);
+        directoryPanel.add(resutlOutput);
+        // add main panel into the frame
+        setContentPane(directoryPanel);
+        // Frame visible
+        setVisible(true);
+    }
+    /**
+     * Listener engine method. This method gathers all button listeners. It will be
+     * called in both drivers.
+     */
+    public void listener() {
+        addStudentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (andrewIdText.getText() == null || andrewIdText.getText().isEmpty()
+                        || andrewIdText.getText().equals("\t")) {
+                    area.append("Andrew ID missing." + "\n");
+                    return;
+                } else {
+                    Student existingAndrewId = d.searchByAndrewId(andrewIdText.getText());
+                    if (existingAndrewId != null) {
+                        area.append("Andrew ID already exist" + "\n");
+                        andrewIdText.setText("");
+                        return;
+                    } else {
+                        newStudent = new Student(andrewIdText.getText());
+                        area.setText("");
+                        area.append("Success adding Andrew ID ... : " + andrewIdText.getText() + "\n");
+                        andrewIdText.setText("");
+                        if (firstNameText.getText() == null || firstNameText.getText().isEmpty()
+                                || firstNameText.getText().equals("\t")) {
+                            area.append("First Name missing." + "\n");
+                            firstNameText.setText("");
+                            return;
+                        } else {
+                            newStudent.setFirstName(firstNameText.getText());
+                            area.append("Success adding first Name ... : " + firstNameText.getText() + "\n");
+                            firstNameText.setText("");
+                        }
+                        if (lastNameText.getText() == null || lastNameText.getText().isEmpty()
+                                || lastNameText.getText().equals("\t")) {
+                            area.append("last Name missing." + "\n");
+                            lastNameText.setText("");
+                            return;
+                        } else {
+                            newStudent.setLastName(lastNameText.getText());
+                            area.append("Success adding last name ... : " + lastNameText.getText() + "\n");
+                            lastNameText.setText("");
+                        }
+                        if (phoneNumberText.getText().isEmpty() || phoneNumberText.getText().equals("\t")) {
+                            area.append("No phone number added.");
+                        } else {
+                            newStudent.setPhoneNumber(phoneNumberText.getText());
+                            area.append("Success adding phone number ... : " + phoneNumberText.getText() + "\n");
+                            phoneNumberText.setText("");
+                        }
+                        d.addStudent(newStudent);
+                        return;
+                    }
+                }
+            }
+        });
+        deleteStudentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (deleteStudentText.getText() == null || deleteStudentText.getText().isEmpty()) {
+                    area.append("Please enter a valid Andrew ID\n");
+                    deleteStudentText.setText("");
+                    return;
+                } else {
+                    if (d.searchByAndrewId(deleteStudentText.getText()) == null) {
+                        area.append("Andrew ID does not exist\n");
+                        deleteStudentText.setText("");
+                        return;
+                    } else {
+                        area.setText("");
+                        d.deleteStudent(deleteStudentText.getText());
+                        area.append("Success deleting ... :" + deleteStudentText.getText() + "\n");
+                        deleteStudentText.setText("");
+                        return;
+                    }
+                }
+            }
+        });
+        andrewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (searchKeyText.getText() == null || searchKeyText.getText().isEmpty()) {
+                    area.append("Please enter a valid search key\n");
+                    searchKeyText.setText("");
+                    return;
+                } else {
+                    if (d.searchByAndrewId(searchKeyText.getText()) == null) {
+                        area.append("Andrew ID does not exist\n");
+                        searchKeyText.setText("");
+                        return;
+                    } else {
+                        area.setText("");
+                        area.append(d.searchByAndrewId(searchKeyText.getText()).toString() + "\n");
+                        searchKeyText.setText("");
+                    }
+                }
+            }
+        });
+        searchKeyText.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER) {
+                    if (searchKeyText.getText() == null || searchKeyText.getText().isEmpty()) {
+                        area.append("Please enter a valid a andrew ID\n");
+                        searchKeyText.setText("");
+                        return;
+                    } else {
+                        if (d.searchByAndrewId(searchKeyText.getText()) == null) {
+                            area.append("Andrew ID does not exist\n");
+                            searchKeyText.setText("");
+                            return;
+                        } else {
+                            area.setText("");
+                            area.append(d.searchByAndrewId(searchKeyText.getText()).toString() + "\n");
+                            searchKeyText.setText("");
+                        }
+                    }
+                }
+            }
+        });
+        firstNameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (searchKeyText.getText() == null || searchKeyText.getText().isEmpty()) {
+                    area.append("Please enter a valid first name\n");
+                    searchKeyText.setText("");
+                    return;
+                } else {
+                    if (d.searchByFirstName(searchKeyText.getText()) == null
+                            || d.searchByFirstName(searchKeyText.getText()).isEmpty()) {
+                        area.append("First name does not exist\n");
+                        searchKeyText.setText("");
+                        return;
+                    } else {
+                        area.setText("");
+                        area.append(d.searchByFirstName(searchKeyText.getText()).toString() + "\n");
+                        searchKeyText.setText("");
+                    }
+                }
+            }
+        });
+        lastNameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (searchKeyText.getText() == null || searchKeyText.getText().isEmpty()) {
+                    area.append("Please enter a valid last name\n");
+                    searchKeyText.setText("");
+                    return;
+                } else {
+                    if (d.searchByLastName(searchKeyText.getText()) == null
+                            || d.searchByLastName(searchKeyText.getText()).isEmpty()) {
+                        area.append("Last name does not exist\n");
+                        searchKeyText.setText("");
+                        return;
+                    } else {
+                        area.setText("");
+                        area.append(d.searchByLastName(searchKeyText.getText()).toString() + "\n");
+                        searchKeyText.setText("");
+                    }
+                }
+            }
+        });
+        addWindowFocusListener(new WindowAdapter() {
+            public void windowGainedFocus(WindowEvent e) {
+                searchKeyText.requestFocusInWindow();
+            }
+        });
+    }
+    /**
+     * @param args
+     *            Main method.
+     */
+    public static void main(String[] args) {
+        // JOption Pane (Window PopUp)
+        int response = JOptionPane.showConfirmDialog(null, "Would you like to upload a file ?", "Student Directory",
+                JOptionPane.YES_NO_CANCEL_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            try {
+                // if response is yes, FileChoose will be invoked
+                EventQueue.invokeAndWait(new Runnable() {
+                    @SuppressWarnings("static-access")
+                    @Override
+                    public void run() {
+                        String folder = System.getProperty("user.dir");
+                        // Add filter to the FileChoose (Only csv files)
+                        FileFilter filter = new FileNameExtensionFilter("csv");
+                        JFileChooser fc = new JFileChooser(folder);
+                        fc.addChoosableFileFilter(filter);
+                        int result = fc.showOpenDialog(null);
+                        if (result == fc.APPROVE_OPTION) {
+                            new DirectoryDriver(new File(fc.getSelectedFile().getName()));
+                        }
+                    }
+                });
+            } catch (InvocationTargetException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else if (response == JOptionPane.NO_OPTION) {
+            new DirectoryDriver();
+            //Exit the system in case of cancel or exit the JOption Panel
+        } else {
+            System.exit(0);
+        }
+    }
+}
